@@ -42,9 +42,76 @@ azure_devops:
 file_paths:
   yaml_file_path: "path/to/your/backlog.yaml"
   template_file_path: "work-item-templates.yaml"  # Optional, relative to script directory
+
+formatting:
+  enable_markdown: true  # Enable Markdown to HTML conversion
 ```
 
 **Note**: File paths can be absolute or relative to the script directory. Relative paths are automatically resolved to the directory containing the script.
+
+## ✨ Markdown Support
+
+The script supports converting Markdown to HTML for rich formatting in description and acceptance criteria fields.
+
+### Enabling Markdown Support
+
+1. **Install the markdown package**:
+   ```bash
+   pip install markdown
+   ```
+
+2. **Enable in parameters.yaml**:
+   ```yaml
+   formatting:
+     enable_markdown: true
+   ```
+
+3. **Use Markdown in your YAML files**:
+   ```yaml
+   features:
+     - Title: "User Authentication"
+       Description: |
+         ## Overview
+         Implement **secure** authentication with:
+         - Username/password login
+         - Multi-factor authentication
+         - Password reset functionality
+         
+         > **Note**: This is a critical security feature.
+       
+       user_stories:
+         - Title: "User Login"
+           Acceptance_Criteria: |
+             ## Acceptance Criteria
+             
+             ### ✅ Successful Login
+             1. **Given** valid credentials
+             2. **When** user logs in
+             3. **Then** redirect to dashboard
+             
+             ### ❌ Failed Login
+             - Show error message
+             - Log failed attempt
+             - Implement rate limiting
+   ```
+
+### Supported Markdown Features
+
+- **Headers**: `# H1`, `## H2`, `### H3`
+- **Emphasis**: `**bold**`, `*italic*`
+- **Lists**: Bulleted and numbered lists
+- **Code blocks**: Fenced code blocks with syntax highlighting
+- **Tables**: Markdown table syntax
+- **Blockquotes**: `> Important note`
+- **Links**: `[text](url)`
+- **Checkboxes**: `- [ ] Task item`
+
+### Benefits
+
+- **Rich Formatting**: Create visually appealing work items with proper formatting
+- **Better Readability**: Use headers, lists, and emphasis for clear documentation
+- **Code Examples**: Include formatted code snippets in descriptions
+- **Professional Documentation**: Generate work items that look great in Azure DevOps
 ```
 
 ### Setup Steps
@@ -65,6 +132,7 @@ file_paths:
 
 - **YAML-based work item definition**: Define features, user stories, and tasks in YAML
 - **Custom field support**: Map YAML fields to any Azure DevOps fields via templates
+- **Markdown support**: Convert Markdown to HTML for rich formatting in descriptions and acceptance criteria
 - **Hierarchical relationships**: Automatically creates parent-child links
 - **Environment variable support**: Use environment variables for sensitive data
 - **Template system**: Define custom field mappings for different work item types
@@ -249,6 +317,7 @@ grep -E "Custom\.|Microsoft\.VSTS" sample-user-story.json
 | `parameters.yaml.sample` | Sample configuration file |
 | `work-item-templates.yaml` | Sample custom field templates |
 | `sample-backlog-with-custom-fields.yaml` | Sample work items with custom fields |
+| `sample-backlog-with-markdown.yaml` | Sample work items with Markdown formatting |
 | `README-parameters.md` | Configuration documentation |
 | `README-templates.md` | Template system documentation |
 
@@ -260,6 +329,7 @@ grep -E "Custom\.|Microsoft\.VSTS" sample-user-story.json
 - Required Python packages:
   - `azure-devops`
   - `PyYAML`
+  - `markdown` (optional, for Markdown to HTML conversion)
 
 ## 🛡️ Security Notes
 

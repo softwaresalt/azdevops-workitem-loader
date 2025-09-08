@@ -1,5 +1,5 @@
 """
-Script to load features, user stories, and tasks into Azure DevOps from a YAML file.
+Script to load features, user stories, and tasks into Azure DevOps from YAML files.
 Python equivalent of ado.yaml-import.ps1 using azure-devops library
 
 Configuration:
@@ -12,12 +12,19 @@ Prerequisites:
 - PyYAML package installed (pip install PyYAML)
 - Personal Access Token (PAT) for authentication (configured in parameters.yaml)
 - parameters.yaml file with all required configuration parameters
+- Optional: markdown package for Markdown to HTML conversion (pip install markdown)
 """
 
 import yaml
 import sys
 import os
 from typing import Dict, List, Any, Optional
+
+try:
+    import markdown
+    MARKDOWN_AVAILABLE = True
+except ImportError:
+    MARKDOWN_AVAILABLE = False
 
 from azure.devops.connection import Connection
 from azure.devops.v7_1.work_item_tracking.models import (
@@ -30,7 +37,7 @@ from msrest.authentication import BasicAuthentication
 class AzureDevOpsWorkItemLoader:
     def __init__(self, yaml_file_path: str, organization_url: str, project: str, 
                  area_path: str, iteration_path: str, personal_access_token: str,
-                 template_file_path: Optional[str] = None):
+                 template_file_path: Optional[str] = None, enable_markdown: bool = False):
         """
         Initialize the work item loader.
         
@@ -42,6 +49,7 @@ class AzureDevOpsWorkItemLoader:
             iteration_path: Iteration path for work items
             personal_access_token: Personal Access Token for authentication
             template_file_path: Optional path to template file (YAML) defining work item fields
+            enable_markdown: Enable Markdown to HTML conversion for description fields
         """
         self.yaml_file_path = yaml_file_path
         self.organization_url = organization_url
@@ -49,9 +57,19 @@ class AzureDevOpsWorkItemLoader:
         self.area_path = area_path
         self.iteration_path = iteration_path
         self.template_file_path = template_file_path
+        self.enable_markdown = enable_markdown
         self.connection = None
         self.work_item_tracking_client = None
         self.work_item_templates = {}
+        
+        # Check markdown support
+        if self.enable_markdown and not MARKDOWN_AVAILABLE:
+            print("WARNING: Markdown support requested but 'markdown' package not installed.")
+            print("Install with: pip install markdown")
+            print("Falling back to plain text for descriptions.")
+            self.enable_markdown = False
+        elif self.enable_markdown:
+            print("✓ Markdown support enabled - descriptions will be converted to HTML")
         
         # Load templates if provided
         if template_file_path:
@@ -59,6 +77,40 @@ class AzureDevOpsWorkItemLoader:
         
         # Initialize connection
         self._initialize_connection(personal_access_token)
+        
+    def convert_markdown_to_html(self, text: str) -> str:
+        """
+        Convert Markdown text to HTML if Markdown support is enabled.
+        
+        Args:
+            text: Input text (may contain Markdown)
+            
+        Returns:
+            HTML formatted text if Markdown is enabled, otherwise original text
+        """
+        if not self.enable_markdown or not text:
+            return text
+            
+        if not MARKDOWN_AVAILABLE:
+            return text
+            
+        try:
+            # Convert Markdown to HTML
+            # Extensions for better Azure DevOps compatibility
+            html = markdown.markdown(
+                text, 
+                extensions=[
+                    'markdown.extensions.tables',      # Support tables
+                    'markdown.extensions.fenced_code', # Support code blocks
+                    'markdown.extensions.nl2br',       # Convert newlines to <br>
+                    'markdown.extensions.toc'          # Support table of contents
+                ]
+            )
+            return html
+        except Exception as e:
+            print(f"Warning: Failed to convert Markdown to HTML: {e}")
+            print("Falling back to plain text")
+            return text
         
     def _initialize_connection(self, personal_access_token: str) -> None:
         """Initialize connection to Azure DevOps using Personal Access Token."""
@@ -245,6 +297,10 @@ class AzureDevOpsWorkItemLoader:
     def create_work_item_patch_document(self, work_item_type: str, title: str, 
                                       description: str, **additional_fields) -> List[JsonPatchOperation]:
         """Create a patch document for work item creation."""
+        
+        # Convert description to HTML if Markdown is enabled
+        processed_description = self.convert_markdown_to_html(description)
+        
         patch_document = [
             JsonPatchOperation(
                 op="add",
@@ -259,7 +315,7 @@ class AzureDevOpsWorkItemLoader:
             JsonPatchOperation(
                 op="add",
                 path="/fields/System.Description",
-                value=description
+                value=processed_description
             ),
             JsonPatchOperation(
                 op="add",
@@ -328,13 +384,18 @@ class AzureDevOpsWorkItemLoader:
         if not acceptance_criteria or acceptance_criteria.strip() == "":
             acceptance_criteria = "Acceptance criteria to be defined"
         
+        # Convert acceptance criteria to HTML if Markdown is enabled
+        processed_acceptance_criteria = self.convert_markdown_to_html(acceptance_criteria)
+        
         print(f"    Acceptance Criteria Length: {len(acceptance_criteria)}")
         print(f"    First 200 chars: {acceptance_criteria[:200]}")
+        if self.enable_markdown and processed_acceptance_criteria != acceptance_criteria:
+            print(f"    ✓ Converted Markdown to HTML for acceptance criteria")
         
         try:
             # Start with default fields for User Story
             additional_fields = {
-                "Microsoft.VSTS.Common.AcceptanceCriteria": acceptance_criteria
+                "Microsoft.VSTS.Common.AcceptanceCriteria": processed_acceptance_criteria
             }
             
             # Get template-based field mappings and merge with default fields
@@ -523,6 +584,7 @@ def main():
     azure_config = parameters.get('azure_devops', {})
     file_config = parameters.get('file_paths', {})
     env_config = parameters.get('environment_variables', {})
+    formatting_config = parameters.get('formatting', {})
     
     # Get Azure DevOps settings
     organization_url = azure_config.get('organization_url')
@@ -533,6 +595,9 @@ def main():
     # Get file paths
     yaml_file_path = file_config.get('yaml_file_path')
     template_file_path = file_config.get('template_file_path')
+    
+    # Get formatting options
+    enable_markdown = formatting_config.get('enable_markdown', False)
     
     # Get Personal Access Token with environment variable fallback
     personal_access_token = azure_config.get('personal_access_token')
@@ -597,6 +662,7 @@ def main():
     print(f"  Project: {project}")
     print(f"  YAML file: {yaml_file_path}")
     print(f"  Template file: {template_file_path if template_file_path else 'None (using defaults)'}")
+    print(f"  Markdown support: {'Enabled' if enable_markdown else 'Disabled'}")
     print(f"  Personal Access Token: {'*' * (len(personal_access_token) - 4) + personal_access_token[-4:] if personal_access_token else 'Not set'}")
     
     try:
@@ -609,7 +675,8 @@ def main():
             area_path=area_path,
             iteration_path=iteration_path,
             personal_access_token=personal_access_token,
-            template_file_path=template_file_path
+            template_file_path=template_file_path,
+            enable_markdown=enable_markdown
         )
         
         print("Starting work item processing...")

@@ -1,0 +1,60 @@
+# Azure DevOps Work Item Loader Configuration - SAMPLE
+# Copy this file to 'parameters.yaml' and update with your actual values
+# DO NOT commit the actual parameters.yaml file to version control
+
+# Azure DevOps Configuration
+azure_devops:
+  # Azure DevOps organization URL (e.g., https://dev.azure.com/myorg)
+  organization_url: "https://dev.azure.com/your-organization-name"
+  
+  # Azure DevOps project name
+  project: "Your-Project-Name"
+  
+  # Area path for work items (usually the project name)
+  area_path: "Your-Project-Name"
+  
+  # Iteration path for work items (usually the project name)
+  iteration_path: "Your-Project-Name"
+  
+  # Personal Access Token for authentication
+  # To create a PAT: Go to {organization_url}/_usersSettings/tokens
+  # Required scopes: Work Items (Read & Write)
+  # SECURITY NOTE: Keep this token secure and never commit it to version control
+  personal_access_token: "your_pat_token_here"
+
+# File Paths Configuration
+file_paths:
+  # Path to the YAML file containing work items to import
+  # Use forward slashes or double backslashes for Windows paths
+  # Can be absolute path or relative to script directory
+  yaml_file_path: "path/to/your/product.backlog.yaml"
+  
+  # Optional: Path to template file for custom field definitions
+  # Can be absolute path or relative to script directory
+  # Set to null or remove to use default fields only
+  template_file_path: "work-item-templates.yaml"
+  # template_file_path: null  # Uncomment to disable templates
+
+# Optional: Environment Variables
+# You can also use environment variables instead of hardcoded values
+environment_variables:
+  use_env_for_pat: false  # Set to true to use AZURE_DEVOPS_PAT environment variable
+  use_env_for_yaml_path: false  # Set to true to use YAML_FILE_PATH environment variable
+  use_env_for_template_path: false  # Set to true to use TEMPLATE_FILE_PATH environment variable
+
+# Formatting Options
+formatting:
+  # Enable Markdown to HTML conversion for description and acceptance criteria fields
+  # Requires 'markdown' package: pip install markdown
+  # When enabled, Markdown syntax in descriptions will be converted to HTML for rich formatting
+  enable_markdown: false  # Set to true to enable Markdown support
+
+# Example with actual paths (Windows):
+# file_paths:
+#   yaml_file_path: "C:\\Users\\username\\Documents\\project\\backlog.yaml"
+#   template_file_path: "C:\\Tools\\azdevops\\work-item-templates.yaml"
+
+# Example with actual paths (Unix/Linux/Mac):
+# file_paths:
+#   yaml_file_path: "/home/username/projects/backlog.yaml"
+#   template_file_path: "/home/username/projects/work-item-templates.yaml"

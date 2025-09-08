@@ -1,0 +1,237 @@
+# Sample Work Items with Markdown Support
+# This file demonstrates how to use Markdown formatting in descriptions and acceptance criteria
+# Enable markdown support in parameters.yaml: formatting.enable_markdown = true
+
+features:
+  - Title: "User Authentication System"
+    Description: |
+      ## Overview
+      Implement a comprehensive user authentication system with the following features:
+      
+      ### Key Components
+      - **Login Form**: Simple username/password authentication
+      - **Registration**: User self-registration with email verification
+      - **Password Reset**: Secure password reset via email
+      - **Multi-Factor Authentication**: Optional 2FA support
+      
+      ### Security Requirements
+      - Passwords must meet complexity requirements
+      - Session management with secure tokens
+      - Rate limiting to prevent brute force attacks
+      
+      ```bash
+      # Example API endpoints
+      POST /api/auth/login
+      POST /api/auth/register
+      POST /api/auth/forgot-password
+      ```
+      
+      > **Note**: This feature is critical for compliance with security standards.
+    
+    user_stories:
+      - Title: "User Login with Username and Password"
+        Description: |
+          As a **registered user**, I want to log in with my username and password so that I can access my account securely.
+          
+          ### Technical Details
+          - Use secure authentication protocols
+          - Implement session management
+          - Provide clear error messages for failed attempts
+        
+        Acceptance_Criteria: |
+          ## Acceptance Criteria
+          
+          ### ✅ Successful Login
+          1. **Given** a user with valid credentials
+          2. **When** they enter correct username and password
+          3. **Then** they should be redirected to the dashboard
+          4. **And** a secure session should be established
+          
+          ### ❌ Failed Login
+          1. **Given** a user enters invalid credentials
+          2. **When** they attempt to login
+          3. **Then** they should see an error message
+          4. **And** the system should log the failed attempt
+          
+          ### 🔒 Security Requirements
+          - Passwords should be hashed and salted
+          - Implement rate limiting (max 5 attempts per minute)
+          - Lock account after 3 consecutive failed attempts
+          - Use HTTPS for all authentication requests
+          
+          ### 📱 User Experience
+          - Login form should be responsive
+          - Show loading indicator during authentication
+          - Remember username (not password) option
+          - Clear validation messages
+          
+          ### 🧪 Testing Checklist
+          - [ ] Valid credentials login
+          - [ ] Invalid username test
+          - [ ] Invalid password test
+          - [ ] Account lockout test
+          - [ ] Rate limiting test
+          - [ ] Session timeout test
+        
+        StoryPoints: 8
+        BusinessValue: 50
+        UserType: "End User"
+        
+        tasks:
+          - Title: "Design login form UI"
+            Description: |
+              Create a responsive login form with the following elements:
+              
+              ### Form Elements
+              - Username/email input field
+              - Password input field with show/hide toggle
+              - "Remember me" checkbox
+              - "Forgot password?" link
+              - Submit button with loading state
+              
+              ### Design Requirements
+              - Follow company design system
+              - Ensure accessibility (WCAG 2.1 AA)
+              - Mobile-first responsive design
+              
+              ### Mockups
+              Include designs for:
+              1. Default state
+              2. Loading state
+              3. Error state
+              4. Success state
+            
+            Activity: "Design"
+            Remaining_Work: 8
+            Complexity: "Medium"
+            SkillRequired: "UI/UX Design"
+          
+          - Title: "Implement authentication API endpoint"
+            Description: |
+              Develop the backend API endpoint for user authentication.
+              
+              ### API Specification
+              ```http
+              POST /api/auth/login
+              Content-Type: application/json
+              
+              {
+                "username": "user@example.com",
+                "password": "securePassword123"
+              }
+              ```
+              
+              ### Response Format
+              ```json
+              {
+                "success": true,
+                "token": "jwt_token_here",
+                "user": {
+                  "id": 123,
+                  "username": "user@example.com",
+                  "role": "user"
+                }
+              }
+              ```
+              
+              ### Error Handling
+              - Return appropriate HTTP status codes
+              - Provide meaningful error messages
+              - Log security events
+            
+            Activity: "Development"
+            Remaining_Work: 16
+            Complexity: "High"
+            SkillRequired: "Backend Development"
+      
+      - Title: "Password Reset Functionality"
+        Description: |
+          As a **user who forgot their password**, I want to reset my password securely so that I can regain access to my account.
+          
+          ### Process Flow
+          1. User requests password reset via email
+          2. System generates secure reset token
+          3. User receives email with reset link
+          4. User clicks link and sets new password
+          5. Token is invalidated after use
+        
+        Acceptance_Criteria: |
+          ## Password Reset Acceptance Criteria
+          
+          ### 📧 Email Request
+          - User can request reset using registered email
+          - System validates email exists in database
+          - Generic success message (security - don't reveal if email exists)
+          
+          ### 🔗 Reset Link
+          - Reset link expires after 1 hour
+          - Link can only be used once
+          - Link contains secure, random token
+          
+          ### 🔑 New Password
+          - User can set new password meeting complexity requirements
+          - Old password is immediately invalidated
+          - User receives confirmation email
+          
+          ### 🛡️ Security
+          - Rate limit reset requests (1 per 5 minutes per email)
+          - Log all reset attempts
+          - Invalidate all active sessions after password change
+        
+        StoryPoints: 5
+        BusinessValue: 30
+        UserType: "End User"
+
+  - Title: "Dashboard and User Profile Management"
+    Description: |
+      ## User Dashboard
+      Create a personalized dashboard where users can:
+      
+      - View their **profile information**
+      - Update **account settings**
+      - Monitor **recent activity**
+      - Access **quick actions**
+      
+      ### Features
+      | Feature | Description | Priority |
+      |---------|-------------|----------|
+      | Profile View | Display user information | High |
+      | Edit Profile | Allow users to update info | High |
+      | Activity Log | Show recent user actions | Medium |
+      | Preferences | User customization options | Low |
+      
+      ### Design Principles
+      > Keep the interface clean and intuitive. Users should be able to find what they need within 3 clicks.
+    
+    user_stories:
+      - Title: "View Personal Dashboard"
+        Description: |
+          As a **logged-in user**, I want to see a personalized dashboard so that I can quickly access relevant information and actions.
+          
+          The dashboard should provide:
+          - Welcome message with user's name
+          - Summary of recent activity
+          - Quick access to common features
+          - Navigation to other parts of the application
+        
+        Acceptance_Criteria: |
+          ## Dashboard Acceptance Criteria
+          
+          ### 🏠 Dashboard Layout
+          - Clean, organized layout with clear sections
+          - Responsive design works on desktop and mobile
+          - Fast loading time (< 2 seconds)
+          
+          ### 👋 Personalization
+          - Display user's name and avatar
+          - Show user-specific content and preferences
+          - Provide quick access to frequently used features
+          
+          ### 📊 Information Display
+          - Recent activity summary (last 10 actions)
+          - Important notifications or alerts
+          - Quick stats relevant to user's role
+        
+        StoryPoints: 3
+        BusinessValue: 20
+        UserType: "End User"
