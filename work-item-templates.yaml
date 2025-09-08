@@ -1,0 +1,113 @@
+# Work Item Templates Configuration
+# This file defines custom fields for different work item types in Azure DevOps
+# Supports both YAML and JSON formats
+
+work_item_types:
+  Feature:
+    description: "Epic-level features that provide business value"
+    fields:
+      - name: "Feature Value"
+        azure_field_path: "Custom.FeatureValue" 
+        yaml_key: "FeatureValue"
+        type: "string"
+        required: false
+        default: "Discovery"
+        description: "Business value category for the feature"
+      
+      - name: "Business Priority" 
+        azure_field_path: "Microsoft.VSTS.Common.Priority"
+        yaml_key: "BusinessPriority"
+        type: "integer"
+        required: false
+        default: 2
+        description: "Business priority from 1 (highest) to 4 (lowest)"
+        
+      - name: "Target Release"
+        azure_field_path: "Custom.TargetRelease"
+        yaml_key: "TargetRelease" 
+        type: "string"
+        required: false
+        description: "Target release for this feature"
+
+  "User Story":
+    description: "User-focused requirements with acceptance criteria"
+    fields:
+      - name: "Story Points"
+        azure_field_path: "Microsoft.VSTS.Scheduling.StoryPoints"
+        yaml_key: "StoryPoints"
+        type: "float"
+        required: false
+        description: "Effort estimation in story points"
+        
+      - name: "Business Value"
+        azure_field_path: "Microsoft.VSTS.Common.BusinessValue"
+        yaml_key: "BusinessValue"
+        type: "integer"
+        required: false
+        description: "Business value score for prioritization"
+        
+      - name: "User Type"
+        azure_field_path: "Custom.UserType"
+        yaml_key: "UserType"
+        type: "string"
+        required: false
+        description: "Type of user for this story (e.g., Admin, End User, System)"
+
+  Task:
+    description: "Implementation tasks for user stories"
+    fields:
+      - name: "Complexity"
+        azure_field_path: "Custom.Complexity"
+        yaml_key: "Complexity"
+        type: "string"
+        required: false
+        default: "Medium"
+        description: "Task complexity level (Low, Medium, High)"
+        
+      - name: "Skill Required"
+        azure_field_path: "Custom.SkillRequired"
+        yaml_key: "SkillRequired"
+        type: "string"
+        required: false
+        description: "Primary skill area required for this task"
+        
+      - name: "Original Estimate"
+        azure_field_path: "Microsoft.VSTS.Scheduling.OriginalEstimate"
+        yaml_key: "OriginalEstimate"
+        type: "float"
+        required: false
+        description: "Original time estimate in hours"
+
+# Field Type Reference:
+# - string: Text values
+# - integer: Whole numbers
+# - float: Decimal numbers  
+# - boolean: true/false values
+# - string: For dates, use YYYY-MM-DD format
+
+# Common Azure DevOps Field Paths:
+# System fields (standard):
+#   - System.Title
+#   - System.Description
+#   - System.State
+#   - System.AssignedTo
+#   - System.AreaPath
+#   - System.IterationPath
+#   - System.Tags
+#
+# Microsoft VSTS fields (built-in):
+#   - Microsoft.VSTS.Common.Priority (1-4)
+#   - Microsoft.VSTS.Common.Severity (1-4) 
+#   - Microsoft.VSTS.Common.AcceptanceCriteria
+#   - Microsoft.VSTS.Common.BusinessValue
+#   - Microsoft.VSTS.Common.Activity
+#   - Microsoft.VSTS.Scheduling.StoryPoints
+#   - Microsoft.VSTS.Scheduling.OriginalEstimate
+#   - Microsoft.VSTS.Scheduling.RemainingWork
+#   - Microsoft.VSTS.Scheduling.CompletedWork
+#   - Microsoft.VSTS.Scheduling.StartDate
+#   - Microsoft.VSTS.Scheduling.FinishDate
+#
+# Custom fields (organization-specific):
+#   - Custom.FieldName (replace FieldName with your custom field)
+#   - YourCompany.FieldName (if using company prefix)

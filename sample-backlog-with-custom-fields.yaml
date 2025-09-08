@@ -1,0 +1,126 @@
+# Sample Product Backlog with Custom Fields
+# This demonstrates how to use custom fields defined in the template file
+
+features:
+  - Title: "Enhanced User Authentication System"
+    Description: "Implement multi-factor authentication and improved security features for user login"
+    FeatureValue: "Security"           # Custom field: Feature Value
+    BusinessPriority: 1                # Custom field: Business Priority (1=highest)
+    TargetRelease: "Release 2.1"       # Custom field: Target Release
+    
+    user_stories:
+      - Title: "Multi-Factor Authentication Setup"
+        Description: "As a user, I want to set up multi-factor authentication to secure my account"
+        Acceptance_Criteria: |
+          Given I am a registered user
+          When I access my account security settings
+          Then I should be able to:
+          - Choose from SMS, email, or authenticator app options
+          - Configure my preferred MFA method
+          - Test the MFA setup before enabling
+          - Receive confirmation of successful setup
+        StoryPoints: 5                 # Custom field: Story Points
+        BusinessValue: 8               # Custom field: Business Value
+        UserType: "End User"           # Custom field: User Type
+        
+        tasks:
+          - Title: "Design MFA Setup UI"
+            Description: "Create user interface for MFA configuration"
+            Activity: "Design"
+            Remaining_Work: 8
+            Complexity: "Medium"       # Custom field: Complexity
+            SkillRequired: "UI/UX"     # Custom field: Skill Required  
+            OriginalEstimate: 8        # Custom field: Original Estimate
+            
+          - Title: "Implement SMS MFA Backend"
+            Description: "Develop backend services for SMS-based MFA"
+            Activity: "Development"
+            Remaining_Work: 16
+            Complexity: "High"         # Custom field: Complexity
+            SkillRequired: "Backend Development"  # Custom field: Skill Required
+            OriginalEstimate: 16       # Custom field: Original Estimate
+            
+          - Title: "Add Authenticator App Support"
+            Description: "Integrate with TOTP authenticator apps"
+            Activity: "Development" 
+            Remaining_Work: 12
+            Complexity: "High"         # Custom field: Complexity
+            SkillRequired: "Security Development"  # Custom field: Skill Required
+            OriginalEstimate: 12       # Custom field: Original Estimate
+
+      - Title: "Account Recovery with MFA"
+        Description: "As a user, I want to recover my account when I lose access to my MFA device"
+        Acceptance_Criteria: |
+          Given I have MFA enabled but lost access to my device
+          When I request account recovery
+          Then I should be able to:
+          - Verify my identity through alternative methods
+          - Temporarily disable MFA with proper verification
+          - Re-enable MFA with a new device
+          - Receive security notifications about the recovery
+        StoryPoints: 8                 # Custom field: Story Points
+        BusinessValue: 7               # Custom field: Business Value  
+        UserType: "End User"           # Custom field: User Type
+        
+        tasks:
+          - Title: "Design Recovery Flow"
+            Description: "Design the user experience for account recovery"
+            Activity: "Design"
+            Remaining_Work: 4
+            Complexity: "Medium"       # Custom field: Complexity
+            SkillRequired: "UI/UX"     # Custom field: Skill Required
+            OriginalEstimate: 4        # Custom field: Original Estimate
+            
+          - Title: "Implement Recovery Backend"
+            Description: "Build secure account recovery system"
+            Activity: "Development"
+            Remaining_Work: 20
+            Complexity: "High"         # Custom field: Complexity
+            SkillRequired: "Security Development"  # Custom field: Skill Required
+            OriginalEstimate: 20       # Custom field: Original Estimate
+
+  - Title: "Advanced Reporting Dashboard"
+    Description: "Create comprehensive analytics and reporting capabilities for administrators"
+    FeatureValue: "Analytics"          # Custom field: Feature Value
+    BusinessPriority: 2                # Custom field: Business Priority
+    TargetRelease: "Release 2.2"       # Custom field: Target Release
+    
+    user_stories:
+      - Title: "Real-time Usage Analytics"
+        Description: "As an administrator, I want to view real-time usage statistics and user activity"
+        Acceptance_Criteria: |
+          Given I am an administrator
+          When I access the analytics dashboard
+          Then I should see:
+          - Current active users count
+          - Peak usage times and patterns
+          - Feature usage statistics
+          - Performance metrics and response times
+        StoryPoints: 13                # Custom field: Story Points
+        BusinessValue: 6               # Custom field: Business Value
+        UserType: "Admin"              # Custom field: User Type
+        
+        tasks:
+          - Title: "Create Analytics Data Model"
+            Description: "Design database schema for analytics data collection"
+            Activity: "Design"
+            Remaining_Work: 6
+            Complexity: "Medium"       # Custom field: Complexity
+            SkillRequired: "Database Design"  # Custom field: Skill Required
+            OriginalEstimate: 6        # Custom field: Original Estimate
+            
+          - Title: "Build Real-time Data Pipeline"
+            Description: "Implement real-time data collection and processing"
+            Activity: "Development"
+            Remaining_Work: 24
+            Complexity: "High"         # Custom field: Complexity  
+            SkillRequired: "Data Engineering"  # Custom field: Skill Required
+            OriginalEstimate: 24       # Custom field: Original Estimate
+            
+          - Title: "Design Dashboard UI"
+            Description: "Create interactive dashboard with charts and graphs"
+            Activity: "Development"
+            Remaining_Work: 16
+            Complexity: "Medium"       # Custom field: Complexity
+            SkillRequired: "Frontend Development"  # Custom field: Skill Required
+            OriginalEstimate: 16       # Custom field: Original Estimate
