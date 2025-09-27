@@ -15,7 +15,7 @@ The template system allows you to:
 ## 📁 Files
 
 - `ado.workitem-loader.py` - Main script with template support
-- `work-item-templates.yaml` - YAML template configuration example
+- `templates.yaml` - YAML template configuration example
 - `sample-backlog-with-custom-fields.yaml` - Sample input file with custom fields
 - `README-templates.md` - This documentation
 

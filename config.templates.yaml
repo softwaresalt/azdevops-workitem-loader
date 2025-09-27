@@ -1,19 +1,14 @@
 # Work Item Templates Configuration
-# This file defines custom fields for different work item types in Azure DevOps
+# This file defines non-default and *custom* fields for different work item types in Azure DevOps
+# Feature default fields: Title, Description
+# User Story default fields: Title, Description, Acceptance Criteria
+# Task default fields: Title, Description
 # Supports both YAML and JSON formats
 
 work_item_types:
   Feature:
     description: "Epic-level features that provide business value"
     fields:
-      - name: "Feature Value"
-        azure_field_path: "Custom.FeatureValue" 
-        yaml_key: "FeatureValue"
-        type: "string"
-        required: false
-        default: "Discovery"
-        description: "Business value category for the feature"
-      
       - name: "Business Priority" 
         azure_field_path: "Microsoft.VSTS.Common.Priority"
         yaml_key: "BusinessPriority"
@@ -21,13 +16,6 @@ work_item_types:
         required: false
         default: 2
         description: "Business priority from 1 (highest) to 4 (lowest)"
-        
-      - name: "Target Release"
-        azure_field_path: "Custom.TargetRelease"
-        yaml_key: "TargetRelease" 
-        type: "string"
-        required: false
-        description: "Target release for this feature"
 
   "User Story":
     description: "User-focused requirements with acceptance criteria"
@@ -45,32 +33,10 @@ work_item_types:
         type: "integer"
         required: false
         description: "Business value score for prioritization"
-        
-      - name: "User Type"
-        azure_field_path: "Custom.UserType"
-        yaml_key: "UserType"
-        type: "string"
-        required: false
-        description: "Type of user for this story (e.g., Admin, End User, System)"
 
   Task:
     description: "Implementation tasks for user stories"
     fields:
-      - name: "Complexity"
-        azure_field_path: "Custom.Complexity"
-        yaml_key: "Complexity"
-        type: "string"
-        required: false
-        default: "Medium"
-        description: "Task complexity level (Low, Medium, High)"
-        
-      - name: "Skill Required"
-        azure_field_path: "Custom.SkillRequired"
-        yaml_key: "SkillRequired"
-        type: "string"
-        required: false
-        description: "Primary skill area required for this task"
-        
       - name: "Original Estimate"
         azure_field_path: "Microsoft.VSTS.Scheduling.OriginalEstimate"
         yaml_key: "OriginalEstimate"

@@ -1,6 +1,5 @@
 """
 Script to load features, user stories, and tasks into Azure DevOps from YAML files.
-Python equivalent of ado.yaml-import.ps1 using azure-devops library
 
 Configuration:
 - All configuration parameters are loaded from 'parameters.yaml' in the script directory
