@@ -391,4 +391,4 @@ grep -E "Custom\.|Microsoft\.VSTS" sample-user-story.json
 
 ## 📄 License
 
-This project is provided as-is for educational and productivity purposes.
+This project is available under the [MIT License](LICENSE).
